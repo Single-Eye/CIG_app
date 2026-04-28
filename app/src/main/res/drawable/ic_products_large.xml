@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Package / inventory icon — 48dp — displayed on the dashboard card -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M20,7L12,3L4,7v10l8,4l8,-4V7z
+            M12,5.24L17.77,8H6.23L12,5.24z
+            M6,9.59L11,12.14V18.41L6,15.86V9.59z
+            M13,18.41V12.14L18,9.59V15.86L13,18.41z" />
+</vector>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    toolbar.xml — Reusable toolbar included in every screen (except Login).
+    The ThemeOverlay ensures the title text and navigation icon are white.
+    Include this at the top of every activity layout with:
+        <include layout="@layout/toolbar" />
+    Then in Java: setSupportActionBar(findViewById(R.id.toolbar));
+-->
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/colorPrimary"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    android:titleTextColor="@color/colorWhite" />

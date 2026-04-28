@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent_color">#F5A623</color>
+    <color name="background_light">#F5F5F5</color>
+    <color name="black">#000000</color>
+    <color name="card_background">#E8EAF6</color>
+    <color name="colorAccent">#F5A623</color>
+    <color name="colorBackground">#F5F5F5</color>
+    <color name="colorButtonDanger">#D32F2F</color>
+    <color name="colorButtonPrimary">#1B2149</color>
+    <color name="colorButtonSuccess">#388E3C</color>
+    <color name="colorCardAdd">#F5A623</color>
+    <color name="colorCardHistory">#3F51B5</color>
+    <color name="colorCardOrder">#E91E63</color>
+    <color name="colorCardProducts">#1B2149</color>
+    <color name="colorLightBlue">#E8EAF6</color>
+    <color name="colorPink">#E91E63</color>
+    <color name="colorPrimary">#1B2149</color>
+    <color name="colorPrimaryDark">#111535</color>
+    <color name="colorTextOnDark">#FFFFFF</color>
+    <color name="colorTextPrimary">#1B2149</color>
+    <color name="colorTextSecondary">#666666</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="danger_color">#D32F2F</color>
+    <color name="primary_color">#1B2149</color>
+    <color name="primary_dark">#111535</color>
+    <color name="text_primary">#1B2149</color>
+    <color name="text_secondary">#666666</color>
+    <color name="white">#FFFFFF</color>
+    <string name="app_name">Inkify</string>
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="colorSecondary">@color/colorAccent</item>
+        <item name="colorOnSecondary">@color/colorWhite</item>
+        
+        <item name="android:windowBackground">@color/colorBackground</item>
+    </style>
+</resources>

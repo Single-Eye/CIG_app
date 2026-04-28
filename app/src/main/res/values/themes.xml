@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    themes.xml — App-wide theme for Inkify
+    Uses NoActionBar because every screen adds its own custom Toolbar,
+    giving us full control over the title and navigation button styling.
+-->
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="colorSecondary">@color/colorAccent</item>
+        <item name="colorOnSecondary">@color/colorWhite</item>
+        <!-- Default window background for all screens -->
+        <item name="android:windowBackground">@color/colorBackground</item>
+    </style>
+</resources>

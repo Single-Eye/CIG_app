@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_create_order.xml — Build and submit a new order.
+    Toolbar at top. Scrollable form below with customer info, product
+    selection, running item list, and Submit Order button.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorBackground">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- ── Section label: Customer ────────────────────────────────── -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CUSTOMER INFORMATION"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorTextSecondary"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="10dp" />
+
+            <EditText
+                android:id="@+id/editTextCustomerName"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:hint="Customer Name *"
+                android:inputType="textPersonName|textCapWords"
+                android:maxLines="1"
+                android:background="@drawable/rounded_input_background"
+                android:paddingStart="20dp"
+                android:paddingEnd="16dp"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/editTextPhoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:hint="Phone Number *"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:background="@drawable/rounded_input_background"
+                android:paddingStart="20dp"
+                android:paddingEnd="16dp"
+                android:layout_marginBottom="20dp" />
+
+            <!-- ── Section label: Add Products ────────────────────────────── -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ADD PRODUCTS TO ORDER"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorTextSecondary"
+                android:layout_marginBottom="10dp" />
+
+            <!-- Product Spinner — text comes from Product.toString() -->
+            <Spinner
+                android:id="@+id/spinnerProduct"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@drawable/rounded_input_background"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/editTextOrderQuantity"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:hint="Quantity"
+                android:inputType="number"
+                android:maxLines="1"
+                android:background="@drawable/rounded_input_background"
+                android:paddingStart="20dp"
+                android:paddingEnd="16dp"
+                android:layout_marginBottom="12dp" />
+
+            <Button
+                android:id="@+id/buttonAddToOrder"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:text="Add to Order"
+                android:textSize="15sp"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/rounded_button_navy"
+                android:layout_marginBottom="20dp" />
+
+            <!-- ── Section label: Current Items ──────────────────────────── -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ORDER ITEMS"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorTextSecondary"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Fixed-height list so it works inside ScrollView -->
+            <ListView
+                android:id="@+id/listViewOrderItems"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:divider="@color/colorLightBlue"
+                android:dividerHeight="1dp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Running total — updated after each "Add to Order" tap -->
+            <TextView
+                android:id="@+id/textViewTotal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total: USh 0"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorTextPrimary"
+                android:gravity="end"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Submit saves the entire order to the database -->
+            <Button
+                android:id="@+id/buttonSubmitOrder"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:text="Submit Order"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/rounded_button_gold" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
