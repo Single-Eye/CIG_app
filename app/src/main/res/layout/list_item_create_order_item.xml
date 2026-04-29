@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    list_item_create_order_item.xml — One row in the "Order Items" list
+    inside the Create Order screen. White background with padding gives
+    a clean card-like appearance inside the fixed-height ListView.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite"
+    android:paddingStart="14dp"
+    android:paddingEnd="14dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:orientation="vertical">
+
+    <!-- Filled by OrderItem.toString(): "Name × Qty = USh Total" -->
+    <TextView
+        android:id="@+id/textOrderItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:textColor="@color/colorTextPrimary" />
+
+</LinearLayout>

@@ -80,9 +80,10 @@ public class CreateOrderActivity extends AppCompatActivity {
         productList    = new ArrayList<>();
         orderItemList  = new ArrayList<>();
 
-        // Each order item's toString() provides the display text in the ListView
+        // Use our card-style row layout; R.id.textOrderItem is the TextView inside it.
+        // ArrayAdapter calls toString() on each OrderItem to fill that TextView.
         orderItemAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, orderItemList);
+                R.layout.list_item_create_order_item, R.id.textOrderItem, orderItemList);
         listViewOrderItems.setAdapter(orderItemAdapter);
 
         loadProductsIntoSpinner();
@@ -168,8 +169,14 @@ public class CreateOrderActivity extends AppCompatActivity {
         // Get the selected product from the Spinner
         Product selected = productList.get(spinnerProduct.getSelectedItemPosition());
 
-        if (quantity > selected.getQuantityInStock()) {
-            Toast.makeText(this, "Not enough stock. Available: " + selected.getQuantityInStock(),
+        // Query the database for the LIVE stock count.
+        // We never rely on the value stored in the Product object because it was
+        // loaded when the spinner was populated and may be stale if another order
+        // was placed in the same session.
+        int availableStock = databaseHelper.getProductStock(selected.getProductId());
+        if (quantity > availableStock) {
+            Toast.makeText(this,
+                    "Not enough stock. Only " + availableStock + " available.",
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -214,6 +221,20 @@ public class CreateOrderActivity extends AppCompatActivity {
         }
 
         try {
+            // Step 0: Re-check live stock for every item before committing.
+            // Stock could have changed between when the item was added to the
+            // temporary list and when the user tapped Submit Order.
+            for (OrderItem item : orderItemList) {
+                int available = databaseHelper.getProductStock(item.getProductId());
+                if (item.getQuantity() > available) {
+                    Toast.makeText(this,
+                            "\"" + item.getProductName() + "\" only has "
+                                    + available + " left in stock. Please remove it and re-add.",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+
             // Step 1: Save the customer record
             long customerId = databaseHelper.insertCustomer(customerName, phoneNumber);
             if (customerId == -1) {
@@ -239,6 +260,11 @@ public class CreateOrderActivity extends AppCompatActivity {
             }
 
             if (allSaved) {
+                // Step 4: Reduce the stock of every product that was ordered.
+                // This is the bug fix — without this loop, stock never decreases.
+                for (OrderItem item : orderItemList) {
+                    databaseHelper.reduceProductStock(item.getProductId(), item.getQuantity());
+                }
                 Toast.makeText(this,
                         "Order #" + orderId + " submitted!  Total: USh "
                                 + String.format("%,.0f", totalAmount),

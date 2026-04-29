@@ -7,17 +7,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * DatabaseHelper manages the entire SQLite database for RetailOrderManager.
+ * DatabaseHelper manages the entire SQLite database for Inkify.
  *
- * It creates all five tables on first run and provides every method the
- * Activities need to read and write data. Extend this class to add new
- * queries — never write raw SQL directly in an Activity.
+ * VERSION 2 changes: adds image_path column for product photos.
+ * onUpgrade uses ALTER TABLE so existing data is preserved safely.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ── Database configuration ────────────────────────────────────────────────
     private static final String DATABASE_NAME    = "retail_orders.db";
-    private static final int    DATABASE_VERSION = 1;
+    private static final int    DATABASE_VERSION = 2; // bumped from 1 to add image_path
 
     // ── Table names ───────────────────────────────────────────────────────────
     private static final String TABLE_USERS       = "users";
@@ -37,6 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_DESCRIPTION      = "description";
     private static final String COL_PRICE             = "price";
     private static final String COL_QUANTITY_IN_STOCK = "quantity_in_stock";
+    private static final String COL_IMAGE_PATH        = "image_path"; // new in version 2
 
     // ── Column names: customers ───────────────────────────────────────────────
     private static final String COL_CUSTOMER_ID   = "customer_id";
@@ -60,13 +60,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         + COL_USERNAME + " TEXT NOT NULL, "
         + COL_PASSWORD + " TEXT NOT NULL)";
 
+    // image_path is nullable — products without a photo just have NULL here
     private static final String CREATE_TABLE_PRODUCTS =
         "CREATE TABLE " + TABLE_PRODUCTS + " ("
         + COL_PRODUCT_ID        + " INTEGER PRIMARY KEY AUTOINCREMENT, "
         + COL_PRODUCT_NAME      + " TEXT NOT NULL, "
         + COL_DESCRIPTION       + " TEXT, "
         + COL_PRICE             + " REAL NOT NULL, "
-        + COL_QUANTITY_IN_STOCK + " INTEGER NOT NULL)";
+        + COL_QUANTITY_IN_STOCK + " INTEGER NOT NULL DEFAULT 0, "
+        + COL_IMAGE_PATH        + " TEXT)";
 
     private static final String CREATE_TABLE_CUSTOMERS =
         "CREATE TABLE " + TABLE_CUSTOMERS + " ("
@@ -94,22 +96,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         + "FOREIGN KEY(" + COL_PRODUCT_ID + ") REFERENCES " + TABLE_PRODUCTS + "(" + COL_PRODUCT_ID + "))";
 
     // ── Constructor ───────────────────────────────────────────────────────────
-
-    /**
-     * Creates (or opens) the database. Call this once in each Activity's onCreate().
-     *
-     * @param context The Activity or Application context
-     */
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     // ── Lifecycle callbacks ───────────────────────────────────────────────────
 
-    /**
-     * Called automatically the very first time the database is created on this device.
-     * Creates all tables and seeds a default admin user plus two sample products.
-     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_USERS);
@@ -118,12 +110,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_ORDERS);
         db.execSQL(CREATE_TABLE_ORDER_ITEMS);
 
-        // Default admin account so the user can log in right away
+        // Default admin account so the user can log in immediately
         db.execSQL("INSERT INTO " + TABLE_USERS
                 + " (" + COL_USERNAME + ", " + COL_PASSWORD + ")"
                 + " VALUES ('admin', '1234')");
 
-        // Sample products to demonstrate the product list on first launch
+        // Sample products — image_path is omitted so it defaults to NULL
         db.execSQL("INSERT INTO " + TABLE_PRODUCTS
                 + " (" + COL_PRODUCT_NAME + ", " + COL_DESCRIPTION + ", " + COL_PRICE + ", " + COL_QUANTITY_IN_STOCK + ")"
                 + " VALUES ('Notebook A4', 'Pack of 100 pages lined notebook', 2.50, 200)");
@@ -136,28 +128,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Called when DATABASE_VERSION is incremented in a future update.
-     * For now it simply drops all tables and recreates them.
+     * Called when DATABASE_VERSION is incremented.
+     * Version 2: adds the image_path column using ALTER TABLE so no data is lost.
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ORDER_ITEMS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ORDERS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOMERS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
-        onCreate(db);
+        if (oldVersion < 2) {
+            // Existing products will have NULL for image_path — that's fine
+            try {
+                db.execSQL("ALTER TABLE " + TABLE_PRODUCTS
+                        + " ADD COLUMN " + COL_IMAGE_PATH + " TEXT");
+            } catch (Exception e) {
+                // Column may already exist if a partial upgrade ran — safe to ignore
+            }
+        }
     }
 
     // ── USER methods ──────────────────────────────────────────────────────────
 
-    /**
-     * Inserts a new user account into the database.
-     *
-     * @param username The login username
-     * @param password The login password (plain text for this demo)
-     * @return The new row's ID, or -1 if the insert failed
-     */
     public long insertUser(String username, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -168,13 +156,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    /**
-     * Checks whether a username + password pair exists in the database.
-     *
-     * @param username The entered username
-     * @param password The entered password
-     * @return true if the credentials match a row in users, false otherwise
-     */
     public boolean checkUser(String username, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_USERS
@@ -189,55 +170,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // ── PRODUCT methods ───────────────────────────────────────────────────────
 
     /**
-     * Inserts a new product into the products table.
+     * Inserts a new product. Pass null or "" for imagePath if no photo was chosen.
      *
-     * @param name        Product display name
-     * @param description Short description of the product
-     * @param price       Selling price (must be > 0)
-     * @param quantity    Initial quantity in stock
+     * @param imagePath URI string from the gallery picker, or null
      * @return The new product_id, or -1 if the insert failed
      */
-    public long insertProduct(String name, String description, double price, int quantity) {
+    public long insertProduct(String name, String description,
+                              double price, int quantity, String imagePath) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COL_PRODUCT_NAME,      name);
         values.put(COL_DESCRIPTION,       description);
         values.put(COL_PRICE,             price);
         values.put(COL_QUANTITY_IN_STOCK, quantity);
+        values.put(COL_IMAGE_PATH,        imagePath); // null stored as SQL NULL
         long result = db.insert(TABLE_PRODUCTS, null, values);
         db.close();
         return result;
     }
 
     /**
-     * Updates every field of an existing product.
+     * Updates all fields of an existing product, including the image path.
      *
-     * @param id          The product_id to update
-     * @param name        New product name
-     * @param description New description
-     * @param price       New price
-     * @param quantity    New stock quantity
-     * @return Number of rows updated (1 on success, 0 if id not found)
+     * @param imagePath URI string, or null to clear the image
+     * @return Rows updated (1 on success, 0 if id not found)
      */
-    public int updateProduct(int id, String name, String description, double price, int quantity) {
+    public int updateProduct(int id, String name, String description,
+                             double price, int quantity, String imagePath) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COL_PRODUCT_NAME,      name);
         values.put(COL_DESCRIPTION,       description);
         values.put(COL_PRICE,             price);
         values.put(COL_QUANTITY_IN_STOCK, quantity);
+        values.put(COL_IMAGE_PATH,        imagePath);
         int result = db.update(TABLE_PRODUCTS, values,
                 COL_PRODUCT_ID + " = ?", new String[]{String.valueOf(id)});
         db.close();
         return result;
     }
 
-    /**
-     * Permanently removes a product from the database.
-     *
-     * @param id The product_id to delete
-     * @return Number of rows deleted (1 on success, 0 if id not found)
-     */
     public int deleteProduct(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         int result = db.delete(TABLE_PRODUCTS,
@@ -246,24 +218,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    /**
-     * Returns all products ordered alphabetically by name.
-     * IMPORTANT: The caller must call cursor.close() when finished.
-     *
-     * Columns returned: product_id, product_name, description, price, quantity_in_stock
-     */
+    /** Returns all products alphabetically. Caller must close the cursor. */
     public Cursor getAllProducts() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(
                 "SELECT * FROM " + TABLE_PRODUCTS + " ORDER BY " + COL_PRODUCT_NAME, null);
     }
 
-    /**
-     * Returns the single product matching the given ID.
-     * IMPORTANT: The caller must call cursor.close() when finished.
-     *
-     * Columns returned: product_id, product_name, description, price, quantity_in_stock
-     */
+    /** Returns one product by ID. Caller must close the cursor. */
     public Cursor getProductById(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(
@@ -271,16 +233,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(id)});
     }
 
-    // ── CUSTOMER methods ──────────────────────────────────────────────────────
+    /**
+     * Returns the live stock quantity for a product directly from the database.
+     * Always call this before adding to an order — never use cached values.
+     */
+    public int getProductStock(int productId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT " + COL_QUANTITY_IN_STOCK + " FROM " + TABLE_PRODUCTS
+                + " WHERE " + COL_PRODUCT_ID + " = ?",
+                new String[]{String.valueOf(productId)});
+        int stock = 0;
+        if (cursor.moveToFirst()) {
+            stock = cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return stock;
+    }
 
     /**
-     * Inserts a new customer record. A new customer row is created each time
-     * an order is submitted (customers are not de-duplicated in this version).
-     *
-     * @param name  Customer's full name
-     * @param phone Customer's phone number
-     * @return The new customer_id, or -1 if the insert failed
+     * Subtracts quantityOrdered from a product's stock after an order is placed.
+     * Uses Math.max(0, ...) so stock can never go below zero.
      */
+    public int reduceProductStock(int productId, int quantityOrdered) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Read current stock so we can subtract from it
+        Cursor cursor = db.rawQuery(
+                "SELECT " + COL_QUANTITY_IN_STOCK + " FROM " + TABLE_PRODUCTS
+                + " WHERE " + COL_PRODUCT_ID + " = ?",
+                new String[]{String.valueOf(productId)});
+        int result = 0;
+        if (cursor.moveToFirst()) {
+            int currentStock = cursor.getInt(0);
+            int newStock = Math.max(0, currentStock - quantityOrdered);
+            ContentValues values = new ContentValues();
+            values.put(COL_QUANTITY_IN_STOCK, newStock);
+            result = db.update(TABLE_PRODUCTS, values,
+                    COL_PRODUCT_ID + " = ?", new String[]{String.valueOf(productId)});
+        }
+        cursor.close();
+        db.close();
+        return result;
+    }
+
+    // ── CUSTOMER methods ──────────────────────────────────────────────────────
+
     public long insertCustomer(String name, String phone) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -293,14 +291,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ── ORDER methods ─────────────────────────────────────────────────────────
 
-    /**
-     * Inserts a new order header record.
-     *
-     * @param customerId  The customer_id this order belongs to
-     * @param date        Order date/time as a formatted string (yyyy-MM-dd HH:mm:ss)
-     * @param totalAmount The pre-calculated total amount for this order
-     * @return The new order_id, or -1 if the insert failed
-     */
     public long insertOrder(long customerId, String date, double totalAmount) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -312,15 +302,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    /**
-     * Inserts one line item under an existing order.
-     *
-     * @param orderId   The parent order_id
-     * @param productId The product being ordered
-     * @param quantity  How many units
-     * @param unitPrice The price at the time of the order (snapshot — price may change later)
-     * @return The new item_id, or -1 if the insert failed
-     */
     public long insertOrderItem(long orderId, int productId, int quantity, double unitPrice) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -333,12 +314,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    /**
-     * Returns all orders joined with their customer name, newest first.
-     * IMPORTANT: The caller must call cursor.close() when finished.
-     *
-     * Columns returned: order_id, customer_name, order_date, total_amount
-     */
+    /** Returns all orders newest-first, joined with customer name. Caller must close the cursor. */
     public Cursor getAllOrders() {
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
@@ -353,12 +329,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, null);
     }
 
-    /**
-     * Returns all line items for one order, joined with product names.
-     * IMPORTANT: The caller must call cursor.close() when finished.
-     *
-     * Columns returned: item_id, product_name, quantity, unit_price
-     */
+    /** Returns all line items for one order with product names. Caller must close the cursor. */
     public Cursor getOrderItems(int orderId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
@@ -373,12 +344,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, new String[]{String.valueOf(orderId)});
     }
 
-    /**
-     * Returns the header of one specific order, joined with customer details.
-     * IMPORTANT: The caller must call cursor.close() when finished.
-     *
-     * Columns returned: order_id, customer_name, phone_number, order_date, total_amount
-     */
+    /** Returns the header of one order joined with customer info. Caller must close the cursor. */
     public Cursor getOrderById(int orderId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
@@ -392,5 +358,56 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             +   "ON o." + COL_CUSTOMER_ID + " = c." + COL_CUSTOMER_ID + " "
             + "WHERE o." + COL_ORDER_ID + " = ?";
         return db.rawQuery(query, new String[]{String.valueOf(orderId)});
+    }
+
+    // ── SUMMARY methods (used by the Dashboard summary card) ──────────────────
+
+    /**
+     * Returns the total number of orders placed so far.
+     */
+    public int getTotalOrderCount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_ORDERS, null);
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return count;
+    }
+
+    /**
+     * Returns the total revenue: sum of all order totals.
+     * COALESCE ensures 0 is returned when no orders exist yet.
+     */
+    public double getTotalRevenue() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT COALESCE(SUM(" + COL_TOTAL_AMOUNT + "), 0) FROM " + TABLE_ORDERS, null);
+        double total = 0;
+        if (cursor.moveToFirst()) {
+            total = cursor.getDouble(0);
+        }
+        cursor.close();
+        db.close();
+        return total;
+    }
+
+    /**
+     * Returns the combined stock across all products.
+     * COALESCE ensures 0 is returned when the products table is empty.
+     */
+    public int getTotalStock() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT COALESCE(SUM(" + COL_QUANTITY_IN_STOCK + "), 0) FROM " + TABLE_PRODUCTS, null);
+        int total = 0;
+        if (cursor.moveToFirst()) {
+            total = cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return total;
     }
 }

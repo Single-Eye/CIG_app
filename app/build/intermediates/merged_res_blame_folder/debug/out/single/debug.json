@@ -1,5 +1,9 @@
 [
     {
+        "merged": "com.example.retailordermanager.app-merged_res-31:/layout_activity_order_history.xml.flat",
+        "source": "com.example.retailordermanager.app-main-33:/layout/activity_order_history.xml"
+    },
+    {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-merged_res-31:\\drawable_rounded_button_gold.xml.flat",
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\drawable\\rounded_button_gold.xml"
     },
@@ -20,6 +24,10 @@
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\mipmap-xhdpi\\ic_launcher.webp"
     },
     {
+        "merged": "com.example.retailordermanager.app-merged_res-31:/layout_product_card_item.xml.flat",
+        "source": "com.example.retailordermanager.app-main-33:/layout/product_card_item.xml"
+    },
+    {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-merged_res-31:\\mipmap-xxhdpi_ic_launcher.webp.flat",
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\mipmap-xxhdpi\\ic_launcher.webp"
     },
@@ -36,8 +44,20 @@
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\drawable\\ic_launcher_foreground.xml"
     },
     {
+        "merged": "com.example.retailordermanager.app-merged_res-31:/layout_activity_dashboard.xml.flat",
+        "source": "com.example.retailordermanager.app-main-33:/layout/activity_dashboard.xml"
+    },
+    {
+        "merged": "com.example.retailordermanager.app-merged_res-31:/drawable_rounded_image_background.xml.flat",
+        "source": "com.example.retailordermanager.app-main-33:/drawable/rounded_image_background.xml"
+    },
+    {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-merged_res-31:\\drawable_ic_person.xml.flat",
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\drawable\\ic_person.xml"
+    },
+    {
+        "merged": "com.example.retailordermanager.app-merged_res-31:/drawable_ic_money.xml.flat",
+        "source": "com.example.retailordermanager.app-main-33:/drawable/ic_money.xml"
     },
     {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-merged_res-31:\\drawable_ic_order_history_large.xml.flat",
@@ -56,12 +76,12 @@
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\layout\\list_item_product.xml"
     },
     {
-        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-merged_res-31:\\drawable_rounded_button_red.xml.flat",
-        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\drawable\\rounded_button_red.xml"
-    },
-    {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-merged_res-31:\\drawable_ic_username.xml.flat",
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\drawable\\ic_username.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-merged_res-31:\\drawable_rounded_button_red.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\drawable\\rounded_button_red.xml"
     },
     {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-merged_res-31:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
@@ -76,10 +96,6 @@
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\drawable\\ic_products_large.xml"
     },
     {
-        "merged": "com.example.retailordermanager.app-merged_res-31:/layout_list_item_product.xml.flat",
-        "source": "com.example.retailordermanager.app-main-33:/layout/list_item_product.xml"
-    },
-    {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-merged_res-31:\\layout_activity_order_history.xml.flat",
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\layout\\activity_order_history.xml"
     },
@@ -88,8 +104,8 @@
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\mipmap-hdpi\\ic_launcher.webp"
     },
     {
-        "merged": "com.example.retailordermanager.app-merged_res-31:/layout_list_item_order.xml.flat",
-        "source": "com.example.retailordermanager.app-main-33:/layout/list_item_order.xml"
+        "merged": "com.example.retailordermanager.app-merged_res-31:/drawable_ic_arrow_right.xml.flat",
+        "source": "com.example.retailordermanager.app-main-33:/drawable/ic_arrow_right.xml"
     },
     {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-merged_res-31:\\drawable_circle_lightblue_large.xml.flat",
@@ -140,6 +156,10 @@
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\drawable\\ic_products.xml"
     },
     {
+        "merged": "com.example.retailordermanager.app-merged_res-31:/layout_order_history_card_item.xml.flat",
+        "source": "com.example.retailordermanager.app-main-33:/layout/order_history_card_item.xml"
+    },
+    {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-merged_res-31:\\layout_activity_add_product.xml.flat",
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\layout\\activity_add_product.xml"
     },
@@ -148,12 +168,12 @@
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\drawable\\ic_order_history.xml"
     },
     {
-        "merged": "com.example.retailordermanager.app-merged_res-31:/layout_activity_order_detail.xml.flat",
-        "source": "com.example.retailordermanager.app-main-33:/layout/activity_order_detail.xml"
-    },
-    {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-merged_res-31:\\layout_toolbar.xml.flat",
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\layout\\toolbar.xml"
+    },
+    {
+        "merged": "com.example.retailordermanager.app-merged_res-31:/layout_activity_product_list.xml.flat",
+        "source": "com.example.retailordermanager.app-main-33:/layout/activity_product_list.xml"
     },
     {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-merged_res-31:\\drawable_ic_create_order.xml.flat",
@@ -194,6 +214,10 @@
     {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-merged_res-31:\\mipmap-mdpi_ic_launcher.webp.flat",
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-main-33:\\mipmap-mdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.retailordermanager.app-merged_res-31:/layout_list_item_create_order_item.xml.flat",
+        "source": "com.example.retailordermanager.app-main-33:/layout/list_item_create_order_item.xml"
     },
     {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.2\\com.example.retailordermanager.app-merged_res-31:\\drawable_circle_gold.xml.flat",

@@ -34,7 +34,34 @@
                 android:textStyle="bold"
                 android:textColor="@color/colorTextPrimary"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="16dp" />
+
+            <!-- Product image preview — hidden until the user picks a photo -->
+            <ImageView
+                android:id="@+id/imagePreview"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="8dp"
+                android:scaleType="centerCrop"
+                android:clipToOutline="true"
+                android:visibility="gone"
+                android:background="@drawable/rounded_image_background"
+                android:contentDescription="Product image preview" />
+
+            <!-- Opens the phone gallery so the user can choose a photo -->
+            <Button
+                android:id="@+id/btnChooseImage"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:text="Choose Image"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/rounded_button_gold"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:textAllCaps="false" />
 
             <!-- Product Name -->
             <TextView

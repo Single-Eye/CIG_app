@@ -109,12 +109,15 @@ public class ProductListActivity extends AppCompatActivity {
         if (cursor != null) {
             try {
                 while (cursor.moveToNext()) {
-                    int    id    = cursor.getInt(cursor.getColumnIndexOrThrow("product_id"));
-                    String name  = cursor.getString(cursor.getColumnIndexOrThrow("product_name"));
-                    String desc  = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                    double price = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
-                    int    qty   = cursor.getInt(cursor.getColumnIndexOrThrow("quantity_in_stock"));
-                    productList.add(new Product(id, name, desc, price, qty));
+                    int    id        = cursor.getInt(cursor.getColumnIndexOrThrow("product_id"));
+                    String name      = cursor.getString(cursor.getColumnIndexOrThrow("product_name"));
+                    String desc      = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                    double price     = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+                    int    qty       = cursor.getInt(cursor.getColumnIndexOrThrow("quantity_in_stock"));
+                    // getColumnIndex returns -1 if the column is missing (safe for old DB)
+                    int    imgCol    = cursor.getColumnIndex("image_path");
+                    String imgPath   = (imgCol >= 0) ? cursor.getString(imgCol) : null;
+                    productList.add(new Product(id, name, desc, price, qty, imgPath));
                 }
             } finally {
                 cursor.close(); // always close the Cursor to free resources

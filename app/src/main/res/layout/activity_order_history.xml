@@ -27,12 +27,13 @@
             android:textColor="@color/colorTextSecondary"
             android:layout_marginBottom="8dp" />
 
+        <!-- No divider — the card margins create visual separation instead -->
         <ListView
             android:id="@+id/listViewOrders"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@color/colorLightBlue"
-            android:dividerHeight="1dp" />
+            android:divider="@null"
+            android:dividerHeight="0dp" />
 
     </LinearLayout>
 

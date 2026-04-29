@@ -2925,6 +2925,7 @@ drawable design_snackbar_background
 drawable ic_add_product
 drawable ic_add_product_large
 drawable ic_arrow_back_black_24
+drawable ic_arrow_right
 drawable ic_clear_black_24
 drawable ic_clock_black_24dp
 drawable ic_create_order
@@ -2936,6 +2937,7 @@ drawable ic_logout
 drawable ic_m3_chip_check
 drawable ic_m3_chip_checked_circle
 drawable ic_m3_chip_close
+drawable ic_money
 drawable ic_mtrl_checked_circle
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
@@ -3022,6 +3024,7 @@ drawable notify_panel_notification_icon_bg
 drawable rounded_button_gold
 drawable rounded_button_navy
 drawable rounded_button_red
+drawable rounded_image_background
 drawable rounded_input_background
 drawable test_level_drawable
 drawable tooltip_frame_dark
@@ -3114,6 +3117,7 @@ id beginning
 id blocking
 id bottom
 id bounce
+id btnChooseImage
 id buttonAddToOrder
 id buttonLogin
 id buttonLogout
@@ -3237,6 +3241,7 @@ id ifRoom
 id ignore
 id ignoreRequest
 id image
+id imagePreview
 id indeterminate
 id info
 id invisible
@@ -3348,6 +3353,10 @@ id open_search_view_search_prefix
 id open_search_view_status_bar_spacer
 id open_search_view_toolbar
 id open_search_view_toolbar_container
+id orderCustomer
+id orderDate
+id orderTitle
+id orderTotal
 id outline
 id outward
 id packed
@@ -3365,6 +3374,10 @@ id pin
 id position
 id postLayout
 id pressed
+id productImage
+id productName
+id productPrice
+id productStock
 id progress_circular
 id progress_horizontal
 id radio
@@ -3451,6 +3464,7 @@ id tag_window_insets_animation_callback
 id text
 id text2
 id textEnd
+id textOrderItem
 id textSpacerNoButtons
 id textSpacerNoTitle
 id textStart
@@ -3495,6 +3509,9 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
+id txtTotalOrders
+id txtTotalRevenue
+id txtTotalStock
 id unchecked
 id uniform
 id unlabeled
@@ -3649,6 +3666,7 @@ layout design_navigation_menu
 layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_start_icon
+layout list_item_create_order_item
 layout list_item_order
 layout list_item_product
 layout m3_alert_dialog
@@ -3708,6 +3726,8 @@ layout notification_template_custom_big
 layout notification_template_icon_group
 layout notification_template_part_chronometer
 layout notification_template_part_time
+layout order_history_card_item
+layout product_card_item
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material

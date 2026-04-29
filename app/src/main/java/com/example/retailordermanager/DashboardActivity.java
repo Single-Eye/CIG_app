@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -103,5 +104,38 @@ public class DashboardActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    /**
+     * onResume is called every time this screen becomes visible —
+     * including when the user returns from Create Order or Add Product.
+     * This keeps the Business Summary numbers always up to date.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadSummaryData();
+    }
+
+    /**
+     * Queries the database for total orders, revenue, and stock,
+     * then displays the results in the Business Summary card.
+     */
+    private void loadSummaryData() {
+        DatabaseHelper db = new DatabaseHelper(this);
+
+        int    totalOrders  = db.getTotalOrderCount();
+        double totalRevenue = db.getTotalRevenue();
+        int    totalStock   = db.getTotalStock();
+
+        // Find the three TextViews in the summary card
+        TextView txtOrders  = findViewById(R.id.txtTotalOrders);
+        TextView txtRevenue = findViewById(R.id.txtTotalRevenue);
+        TextView txtStock   = findViewById(R.id.txtTotalStock);
+
+        // Display the values — format revenue with comma separator (e.g. "USh 12,500")
+        txtOrders.setText(String.valueOf(totalOrders));
+        txtRevenue.setText("USh " + String.format("%,.0f", totalRevenue));
+        txtStock.setText(String.valueOf(totalStock));
     }
 }
